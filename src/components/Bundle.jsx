@@ -11,7 +11,7 @@ const Bundle = () => {
         height: "300px",
         width: "90%",
         margin: "auto",
-        justifyContent: "center",
+        // justifyContent: "center",
         justifyContent: "space-between",
         background: "#E6E9F2",
         borderRadius: "16px",
