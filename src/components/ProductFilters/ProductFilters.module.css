@@ -1,0 +1,8 @@
+.filters {
+  width: 100%;
+}
+
+.priceCard {
+  background: rgba(234, 88, 12, 0.04);
+  border: 1px solid rgba(234, 88, 12, 0.15);
+}

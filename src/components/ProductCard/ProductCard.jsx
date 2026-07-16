@@ -8,20 +8,17 @@ import {
   Rating,
 } from "@mantine/core";
 import { Link } from "react-router-dom";
-import heart_icon from "../../../assets/heart_icon.svg"; // Adjust the path as necessary
+import heart_icon from "../../../assets/heart_icon.svg";
+import { getDisplayPrice, getProductImage } from "../../lib/products";
 
 const ProductCard = ({ product }) => {
-  const imageUrl =
-    product.images?.edges?.[0]?.node?.url ||
-    product.image?.[0] ||
-    "https://via.placeholder.com/150";
-
+  const imageUrl = getProductImage(product);
+  const displayPrice = getDisplayPrice(product);
   const isMobile = window.innerWidth < 640;
 
   return (
     <Link
       to={`/ProductDetail/${product.id}`}
-      state={{ product }} // ✅ Pass product object via state
       style={{ textDecoration: "none", color: "inherit" }}
     >
       <Box
@@ -76,7 +73,7 @@ const ProductCard = ({ product }) => {
               width: 32,
             }}
             tabIndex={-1}
-            onClick={(e) => e.stopPropagation()}
+            onClick={(e) => e.preventDefault()}
           >
             <img
               src={heart_icon}
@@ -99,7 +96,8 @@ const ProductCard = ({ product }) => {
         </Text>
 
         {!isMobile && (
-          <Text
+          <Text lineClamp={2}
+
             style={{
               fontSize: "0.75rem",
               color: "rgba(107,114,128,0.7)",
@@ -112,13 +110,19 @@ const ProductCard = ({ product }) => {
         )}
 
         <Group gap={8} align="center">
-          <Text style={{ fontSize: "0.75rem", margin: 0 }}>{4.5}</Text>
-          <Rating fractions={2} defaultValue={2} size="12px" color="red" />
+          <Text style={{ fontSize: "0.75rem", margin: 0 }}>{product.rating}</Text>
+          <Rating
+            fractions={2}
+            defaultValue={product.rating / 2.5}
+            readOnly
+            size="12px"
+            color="red"
+          />
         </Group>
 
         <Group align="end" justify="space-between" style={{ width: "100%" }}>
           <Text style={{ fontSize: "1rem", fontWeight: 500 }}>
-            ${product.variants.edges[0].node.price.amount}
+            ${displayPrice.toFixed(2)}
           </Text>
           {!isMobile && (
             <Button
@@ -126,9 +130,9 @@ const ProductCard = ({ product }) => {
               radius="xl"
               size="xs"
               style={{ padding: "6px 16px" }}
+              component="span"
             >
-              Buy now
-            </Button>
+View        </Button>
           )}
         </Group>
       </Box>

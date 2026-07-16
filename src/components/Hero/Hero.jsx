@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   Text,
   Box,
@@ -20,6 +21,7 @@ const sliderData = [
     buttonText1: "Buy now",
     buttonText2: "Find more",
     imgSrc: slide1,
+    shopLink: "/products?category=Headphone",
   },
   {
     id: 2,
@@ -28,6 +30,7 @@ const sliderData = [
     buttonText1: "Shop Now",
     buttonText2: "Explore Deals",
     imgSrc: slide2,
+    shopLink: "/products?category=Accessories",
   },
   {
     id: 3,
@@ -36,6 +39,7 @@ const sliderData = [
     buttonText1: "Order Now",
     buttonText2: "Learn More",
     imgSrc: slide3,
+    shopLink: "/products?category=Laptop",
   },
 ];
 
@@ -131,6 +135,8 @@ const HeaderSlider = () => {
                 </Text>
                 <Group spacing={16} style={{ marginTop: 24 }}>
                   <Button
+                    component={Link}
+                    to={slide.shopLink}
                     style={{
                       padding: "0.625rem 2.5rem",
                       background: "#ea580c",
@@ -148,7 +154,8 @@ const HeaderSlider = () => {
                     variant="subtle"
                     radius="xl"
                     size="md"
-                    component="span"
+                    component={Link}
+                    to="/products"
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -160,35 +167,16 @@ const HeaderSlider = () => {
                       background: "transparent",
                     }}
                   >
-                    <span
+                    {slide.buttonText2}
+                    <img
+                      src={arrow_icon}
+                      alt="arrow_icon"
                       style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "0.5rem",
-                        cursor: "pointer",
-                        padding: "0 5px",
+                        width: "1.25rem",
+                        height: "1.25rem",
+                        display: "inline-block",
                       }}
-                      onMouseEnter={(e) => {
-                        const img = e.currentTarget.querySelector("img");
-                        if (img) img.style.transform = "translateX(0.25rem)";
-                      }}
-                      onMouseLeave={(e) => {
-                        const img = e.currentTarget.querySelector("img");
-                        if (img) img.style.transform = "translateX(0)";
-                      }}
-                    >
-                      {slide.buttonText2}
-                      <img
-                        src={arrow_icon}
-                        alt="arrow_icon"
-                        style={{
-                          transition: "transform 0.2s",
-                          width: "1.25rem",
-                          height: "1.25rem",
-                          display: "inline-block",
-                        }}
-                      />
-                    </span>
+                    />
                   </Button>
                 </Group>
               </Box>

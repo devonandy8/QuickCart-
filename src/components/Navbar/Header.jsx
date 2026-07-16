@@ -1,17 +1,9 @@
-import {
-  IconShoe,
-  IconChartPie3,
-  IconChevronDown,
-  IconShirt,
-  IconNotification,
-  IconDeviceDesktop,
-  IconHeadphones,
-  IconGrillSpatula,
-  IconFaceMaskFilled,
-  IconBrush,
-} from "@tabler/icons-react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import { IconChevronDown, IconShoppingCart } from "@tabler/icons-react";
 import {
   Anchor,
+  Badge,
   Box,
   Burger,
   Button,
@@ -31,50 +23,37 @@ import {
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import logo from "../../../assets/logo.svg";
-import user from "../../../assets/user.svg";
+import userIcon from "../../../assets/user.svg";
 import classes from "./Header.module.css";
-
-const mockdata = [
-  {
-    icon: IconDeviceDesktop,
-    title: "Electronics",
-    description: "This Pokémon’s cry is very loud and distracting",
-  },
-  {
-    icon: IconShirt,
-    title: "Clothing",
-    description: "The fluid of Smeargle’s tail secretions changes",
-  },
-  {
-    icon: IconShoe,
-    title: "Footwear",
-    description: "Yanma is capable of seeing 360 degrees without",
-  },
-  {
-    icon: IconHeadphones,
-    title: "Accessories",
-    description: "The shell’s rounded shape and the grooves on its.",
-  },
-  {
-    icon: IconGrillSpatula,
-    title: "Kitchen",
-    description: "This Pokémon uses its flying ability to quickly chase",
-  },
-  {
-    icon: IconBrush,
-    title: "Beauty and Personal Care",
-    description: "Combusken battles with the intensely hot flames it spews",
-  },
-];
+import { useAuth } from "../../context/AuthContext";
+import { useCart } from "../../context/CartContext";
+import { CATEGORY_NAV, getCategoryProductsPath } from "../../lib/categories";
+import AuthModal from "../Auth/AuthModal";
 
 function Header() {
   const [drawerOpened, { toggle: toggleDrawer, close: closeDrawer }] =
     useDisclosure(false);
   const [linksOpened, { toggle: toggleLinks }] = useDisclosure(false);
+  const [authOpened, setAuthOpened] = useState(false);
+  const [authTab, setAuthTab] = useState("login");
   const theme = useMantineTheme();
+  const { user, profile, signOut, isAuthenticated } = useAuth();
+  const { itemCount } = useCart();
 
-  const links = mockdata.map((item) => (
-    <UnstyledButton className={classes.subLink} key={item.title}>
+  const openAuth = (tab) => {
+    setAuthTab(tab);
+    setAuthOpened(true);
+    closeDrawer();
+  };
+
+  const categoryLinks = CATEGORY_NAV.map((item) => (
+    <UnstyledButton
+      className={classes.subLink}
+      key={item.slug}
+      component={Link}
+      to={getCategoryProductsPath(item.slug)}
+      onClick={closeDrawer}
+    >
       <Group wrap="nowrap" align="flex-start">
         <ThemeIcon size={34} variant="default" radius="md">
           <item.icon size={22} color={theme.colors.red[5]} />
@@ -95,12 +74,14 @@ function Header() {
     <Box className={classes.roots}>
       <header className={classes.header}>
         <Group justify="space-between" h="100%">
-          <img src={logo} size={30} />
+          <Link to="/">
+            <img src={logo} alt="QuickCart" style={{ height: 30 }} />
+          </Link>
 
           <Group h="100%" gap={0} visibleFrom="sm">
-            <a href="#" className={classes.link}>
+            <Link to="/" className={classes.link}>
               Home
-            </a>
+            </Link>
             <HoverCard
               width={600}
               position="bottom"
@@ -109,20 +90,20 @@ function Header() {
               withinPortal
             >
               <HoverCard.Target>
-                <a href="#" className={classes.link}>
+                <Link to="/products" className={classes.link}>
                   <Center inline>
                     <Box component="span" mr={5}>
                       Categories
                     </Box>
                     <IconChevronDown size={16} color={theme.colors.red[5]} />
                   </Center>
-                </a>
+                </Link>
               </HoverCard.Target>
 
               <HoverCard.Dropdown style={{ overflow: "hidden" }}>
                 <Group justify="space-between" px="md">
-                  <Text fw={500}>Features</Text>
-                  <Anchor href="#" fz="xs" style={{ textDecoration: "none" }}>
+                  <Text fw={500}>Shop by category</Text>
+                  <Anchor component={Link} to="/products" fz="xs" style={{ textDecoration: "none" }}>
                     <Text size="xs" color={theme.colors.red[5]}>
                       View all
                     </Text>
@@ -132,56 +113,95 @@ function Header() {
                 <Divider my="sm" />
 
                 <SimpleGrid cols={2} spacing={0}>
-                  {links}
+                  {categoryLinks}
                 </SimpleGrid>
 
                 <div className={classes.dropdownFooter}>
                   <Group justify="space-between">
                     <div>
                       <Text fw={500} fz="sm">
-                        Get started
+                        New here?
                       </Text>
                       <Text size="xs" c="dimmed">
-                        Their food sources have decreased, and their numbers
+                        Create an account to save your cart across devices.
                       </Text>
                     </div>
-                    <Button variant="default">Get started</Button>
+                    <Button
+                      variant="default"
+                      onClick={() => openAuth("signup")}
+                    >
+                      Get started
+                    </Button>
                   </Group>
                 </div>
               </HoverCard.Dropdown>
             </HoverCard>
-            <a href="#" className={classes.link}>
+            <Link to="/products" className={classes.link}>
               Shop
-            </a>
-            <a href="#" className={classes.link}>
+            </Link>
+            <Link to="/contact" className={classes.link}>
               Contact
-            </a>
+            </Link>
           </Group>
 
-          <Group
-            visibleFrom="sm"
-            style={{
-              gap: "0",
-              alignItems: "center",
-            }}
-          >
-            {" "}
-            <Image
-              src={user}
-              style={{
-                width: "18px",
-                height: "18px",
-                borderRadius: "50%",
-              }}
-            />
-            <Button
-              variant="default"
-              style={{
-                border: "none",
-              }}
-            >
-              Account
-            </Button>
+          <Group visibleFrom="sm" gap="xs" align="center">
+            <UnstyledButton component={Link} to="/cart" aria-label="Cart">
+              <Box style={{ position: "relative", display: "flex" }}>
+                <IconShoppingCart size={22} color="#4b5563" />
+                {itemCount > 0 && (
+                  <Badge
+                    size="xs"
+                    circle
+                    color="orange"
+                    style={{
+                      position: "absolute",
+                      top: -6,
+                      right: -8,
+                      minWidth: 18,
+                      height: 18,
+                      padding: 0,
+                    }}
+                  >
+                    {itemCount > 99 ? "99+" : itemCount}
+                  </Badge>
+                )}
+              </Box>
+            </UnstyledButton>
+
+            {isAuthenticated ? (
+              <>
+                <UnstyledButton component={Link} to="/account">
+                  <Group gap={8} wrap="nowrap">
+                    <Image
+                      src={profile?.avatar_url || userIcon}
+                      style={{
+                        width: "24px",
+                        height: "24px",
+                        borderRadius: "50%",
+                      }}
+                    />
+                    <Text size="sm" fw={500}>
+                      {profile?.full_name || user?.email?.split("@")[0]}
+                    </Text>
+                  </Group>
+                </UnstyledButton>
+                <Button
+                  variant="default"
+                  style={{ border: "none" }}
+                  onClick={() => signOut()}
+                >
+                  Sign out
+                </Button>
+              </>
+            ) : (
+              <Button
+                variant="default"
+                style={{ border: "none" }}
+                onClick={() => openAuth("login")}
+              >
+                Account
+              </Button>
+            )}
           </Group>
 
           <Burger
@@ -204,9 +224,9 @@ function Header() {
         <ScrollArea h="calc(100vh - 80px" mx="-md">
           <Divider my="sm" />
 
-          <a href="#" className={classes.link}>
+          <Link to="/" className={classes.link} onClick={closeDrawer}>
             Home
-          </a>
+          </Link>
           <UnstyledButton className={classes.link} onClick={toggleLinks}>
             <Center inline>
               <Box component="span" mr={5}>
@@ -215,23 +235,50 @@ function Header() {
               <IconChevronDown size={16} color={theme.colors.red[5]} />
             </Center>
           </UnstyledButton>
-          <Collapse in={linksOpened}>{links}</Collapse>
-          <a href="#" className={classes.link}>
+          <Collapse in={linksOpened}>{categoryLinks}</Collapse>
+          <Link to="/products" className={classes.link} onClick={closeDrawer}>
             Shop
-          </a>
-          <a href="#" className={classes.link}>
+          </Link>
+          <Link to="/contact" className={classes.link} onClick={closeDrawer}>
             Contact
-          </a>
+          </Link>
+          <Link to="/cart" className={classes.link} onClick={closeDrawer}>
+            Cart {itemCount > 0 ? `(${itemCount})` : ""}
+          </Link>
+          {isAuthenticated && (
+            <Link to="/account" className={classes.link} onClick={closeDrawer}>
+              My account
+            </Link>
+          )}
 
           <Divider my="sm" />
 
           <Group justify="center" grow pb="xl" px="md">
-            <Button variant="default">Log in</Button>
-            <Button>Sign up</Button>
+            {isAuthenticated ? (
+              <Button variant="default" onClick={() => signOut()}>
+                Sign out
+              </Button>
+            ) : (
+              <>
+                <Button variant="default" onClick={() => openAuth("login")}>
+                  Log in
+                </Button>
+                <Button color="orange" onClick={() => openAuth("signup")}>
+                  Sign up
+                </Button>
+              </>
+            )}
           </Group>
         </ScrollArea>
       </Drawer>
+
+      <AuthModal
+        opened={authOpened}
+        onClose={() => setAuthOpened(false)}
+        defaultTab={authTab}
+      />
     </Box>
   );
 }
+
 export default Header;
