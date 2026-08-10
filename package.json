@@ -1,11 +1,13 @@
 {
-  "name": "vite-min-template",
+  "name": "quickcart",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "homepage": "https://devonandy8.github.io/QuickCart-/",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "build:pages": "tsc && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit"
   },
