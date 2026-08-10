@@ -27,11 +27,10 @@ Run `supabase/schema.sql` and `supabase/seed.sql` in your Supabase SQL editor.
 ## Deploy to GitHub Pages
 
 1. Push to `main` on GitHub.
-2. In the repo: **Settings → Pages → Build and deployment → Source:** GitHub Actions.
-3. Add repository secrets (optional, for auth + cart):
-   - `VITE_SUPABASE_URL`
-   - `VITE_SUPABASE_ANON_KEY`
-4. The workflow publishes to `https://devonandy8.github.io/QuickCart-/`.
+2. In the repo: **Settings → Pages → Build and deployment → Source:** Deploy from a branch.
+3. Choose branch **`gh-pages`** and folder **`/ (root)`**, then Save.
+4. Optional secrets (for auth + cart): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
+5. After the workflow runs, the site is live at `https://devonandy8.github.io/QuickCart-/`.
 
 ## Deploy to Vercel
 
