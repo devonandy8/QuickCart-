@@ -40,6 +40,21 @@ Within 1–2 minutes the site is live at **https://devonandy8.github.io/QuickCar
 
 Future pushes to `main` rebuild and update `gh-pages` automatically.
 
+### Custom domain (`quickcartdemo.store`)
+
+If you added a custom domain in Pages settings but see a blank page or DNS error:
+
+**Option A — use GitHub Pages URL (simplest)**  
+In **Settings → Pages → Custom domain**, click **Remove** so the site stays at `devonandy8.github.io/QuickCart-/`.
+
+**Option B — use `quickcartdemo.store`**  
+1. At your domain registrar, add DNS records:
+   - **A** `@` → `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+   - **CNAME** `www` → `devonandy8.github.io`
+2. In GitHub **Settings → Pages**, set custom domain to `quickcartdemo.store` and enable **Enforce HTTPS**
+3. Re-run the deploy workflow with **custom_domain: true**, or set repo secret `CUSTOM_DOMAIN=true`
+4. Wait up to 24h for DNS propagation
+
 ### Optional secrets (auth + cart)
 
 Repo **Settings → Secrets and variables → Actions**:

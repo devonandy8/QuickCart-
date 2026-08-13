@@ -4,6 +4,15 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      custom_domain:
+        description: "Build for quickcartdemo.store (base path /)"
+        required: false
+        default: "false"
+        type: choice
+        options:
+          - "false"
+          - "true"
 
 permissions:
   contents: write
@@ -32,6 +41,7 @@ jobs:
         run: npm run build:pages
         env:
           GITHUB_PAGES: "true"
+          GITHUB_PAGES_CUSTOM_DOMAIN: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.custom_domain == 'true' && 'true' || secrets.CUSTOM_DOMAIN || 'false' }}
           VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
           VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
 
@@ -40,3 +50,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          force_orphan: true
