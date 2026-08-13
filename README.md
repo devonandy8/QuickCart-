@@ -28,13 +28,17 @@ Run `supabase/schema.sql` and `supabase/seed.sql` in your Supabase SQL editor.
 
 The repo auto-deploys on every push to `main`.
 
-### Enable hosting (one-time)
+### Enable hosting (one-time — required)
 
-1. Open **[QuickCart- Pages settings](https://github.com/devonandy8/QuickCart-/settings/pages)**
-2. Under **Build and deployment → Source**, choose **GitHub Actions**
-3. Save, then open **[Actions → Deploy to GitHub Pages](https://github.com/devonandy8/QuickCart-/actions/workflows/deploy-pages.yml)** and click **Run workflow** (or push any commit to `main`)
+The build is already on the **`gh-pages`** branch. You only need to turn Pages on:
 
-Your site will be live at **https://devonandy8.github.io/QuickCart-/**
+1. Open **[github.com/devonandy8/QuickCart-/settings/pages](https://github.com/devonandy8/QuickCart-/settings/pages)**
+2. **Build and deployment → Source:** `Deploy from a branch`
+3. **Branch:** `gh-pages` · **Folder:** `/ (root)` · **Save**
+
+Within 1–2 minutes the site is live at **https://devonandy8.github.io/QuickCart-/**
+
+Future pushes to `main` rebuild and update `gh-pages` automatically.
 
 ### Optional secrets (auth + cart)
 
