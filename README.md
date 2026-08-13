@@ -26,11 +26,22 @@ Run `supabase/schema.sql` and `supabase/seed.sql` in your Supabase SQL editor.
 
 ## Deploy to GitHub Pages
 
-1. Push to `main` on GitHub.
-2. In the repo: **Settings → Pages → Build and deployment → Source:** Deploy from a branch.
-3. Choose branch **`gh-pages`** and folder **`/ (root)`**, then Save.
-4. Optional secrets (for auth + cart): `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`
-5. After the workflow runs, the site is live at `https://devonandy8.github.io/QuickCart-/`.
+The repo auto-deploys on every push to `main`.
+
+### Enable hosting (one-time)
+
+1. Open **[QuickCart- Pages settings](https://github.com/devonandy8/QuickCart-/settings/pages)**
+2. Under **Build and deployment → Source**, choose **GitHub Actions**
+3. Save, then open **[Actions → Deploy to GitHub Pages](https://github.com/devonandy8/QuickCart-/actions/workflows/deploy-pages.yml)** and click **Run workflow** (or push any commit to `main`)
+
+Your site will be live at **https://devonandy8.github.io/QuickCart-/**
+
+### Optional secrets (auth + cart)
+
+Repo **Settings → Secrets and variables → Actions**:
+
+- `VITE_SUPABASE_URL`
+- `VITE_SUPABASE_ANON_KEY`
 
 ## Deploy to Vercel
 
